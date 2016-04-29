@@ -4,7 +4,7 @@
 #
 Name     : libXi
 Version  : 1.7.6
-Release  : 7
+Release  : 8
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXi-1.7.6.tar.gz
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXi-1.7.6.tar.gz
 Summary  : X Input Extension Library
