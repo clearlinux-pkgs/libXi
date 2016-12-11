@@ -4,7 +4,7 @@
 #
 Name     : libXi
 Version  : 1.7.8
-Release  : 11
+Release  : 12
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXi-1.7.8.tar.gz
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXi-1.7.8.tar.gz
 Summary  : X Input Extension Library
@@ -79,8 +79,8 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 /usr/include/X11/extensions/XInput.h
 /usr/include/X11/extensions/XInput2.h
-/usr/lib64/*.so
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/libXi.so
+/usr/lib64/pkgconfig/xi.pc
 
 %files doc
 %defattr(-,root,root,-)
@@ -89,4 +89,5 @@ rm -rf %{buildroot}
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
+/usr/lib64/libXi.so.6
+/usr/lib64/libXi.so.6.1.0
