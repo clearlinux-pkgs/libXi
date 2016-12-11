@@ -4,7 +4,7 @@
 #
 Name     : libXi
 Version  : 1.7.8
-Release  : 12
+Release  : 13
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXi-1.7.8.tar.gz
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXi-1.7.8.tar.gz
 Summary  : X Input Extension Library
@@ -13,8 +13,21 @@ License  : MIT-Opengroup
 Requires: libXi-lib
 Requires: libXi-doc
 BuildRequires : asciidoc
+BuildRequires : gcc-dev32
+BuildRequires : gcc-libgcc32
+BuildRequires : gcc-libstdc++32
+BuildRequires : glibc-dev32
+BuildRequires : glibc-libc32
 BuildRequires : libxslt-bin
+BuildRequires : pkgconfig(32inputproto)
+BuildRequires : pkgconfig(32x11)
+BuildRequires : pkgconfig(32xext)
+BuildRequires : pkgconfig(32xextproto)
+BuildRequires : pkgconfig(32xfixes)
+BuildRequires : pkgconfig(32xorg-macros)
+BuildRequires : pkgconfig(32xproto)
 BuildRequires : pkgconfig(inputproto)
+BuildRequires : pkgconfig(x11)
 BuildRequires : pkgconfig(xext)
 BuildRequires : pkgconfig(xextproto)
 BuildRequires : pkgconfig(xfixes)
@@ -37,6 +50,15 @@ Provides: libXi-devel
 dev components for the libXi package.
 
 
+%package dev32
+Summary: dev32 components for the libXi package.
+Group: Default
+Requires: libXi-lib32
+
+%description dev32
+dev32 components for the libXi package.
+
+
 %package doc
 Summary: doc components for the libXi package.
 Group: Documentation
@@ -53,14 +75,31 @@ Group: Libraries
 lib components for the libXi package.
 
 
+%package lib32
+Summary: lib32 components for the libXi package.
+Group: Default
+
+%description lib32
+lib32 components for the libXi package.
+
+
 %prep
 %setup -q -n libXi-1.7.8
+pushd ..
+cp -a libXi-1.7.8 build32
+popd
 
 %build
 export LANG=C
 %configure --disable-static
 make V=1  %{?_smp_mflags}
 
+pushd ../build32
+export CFLAGS="$CFLAGS -m32"
+export CXXFLAGS="$CXXFLAGS -m32"
+%configure --disable-static  --libdir=/usr/lib32
+make V=1  %{?_smp_mflags}
+popd
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
@@ -70,6 +109,15 @@ make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
 rm -rf %{buildroot}
+pushd ../build32
+%make_install32
+if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
+then
+pushd %{buildroot}/usr/lib32/pkgconfig
+for i in *.pc ; do mv $i 32$i ; done
+popd
+fi
+popd
 %make_install
 
 %files
@@ -82,6 +130,11 @@ rm -rf %{buildroot}
 /usr/lib64/libXi.so
 /usr/lib64/pkgconfig/xi.pc
 
+%files dev32
+%defattr(-,root,root,-)
+/usr/lib32/libXi.so
+/usr/lib32/pkgconfig/32xi.pc
+
 %files doc
 %defattr(-,root,root,-)
 %doc /usr/share/doc/libXi/*
@@ -91,3 +144,8 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 /usr/lib64/libXi.so.6
 /usr/lib64/libXi.so.6.1.0
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libXi.so.6
+/usr/lib32/libXi.so.6.1.0
