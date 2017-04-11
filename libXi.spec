@@ -6,7 +6,7 @@
 #
 Name     : libXi
 Version  : 1.7.9
-Release  : 14
+Release  : 15
 URL      : http://xorg.freedesktop.org/releases/individual/lib/libXi-1.7.9.tar.gz
 Source0  : http://xorg.freedesktop.org/releases/individual/lib/libXi-1.7.9.tar.gz
 Source99 : http://xorg.freedesktop.org/releases/individual/lib/libXi-1.7.9.tar.gz.sig
@@ -95,7 +95,11 @@ popd
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1485203935
+export SOURCE_DATE_EPOCH=1491880108
+export CFLAGS="$CFLAGS -Os -ffunction-sections -fno-semantic-interposition "
+export FCFLAGS="$CFLAGS -Os -ffunction-sections -fno-semantic-interposition "
+export FFLAGS="$CFLAGS -Os -ffunction-sections -fno-semantic-interposition "
+export CXXFLAGS="$CXXFLAGS -Os -ffunction-sections -fno-semantic-interposition "
 %configure --disable-static
 make V=1  %{?_smp_mflags}
 
@@ -115,7 +119,7 @@ export no_proxy=localhost
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1485203935
+export SOURCE_DATE_EPOCH=1491880108
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
